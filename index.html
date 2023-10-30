@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulier</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="style">
+    <select id="lang">
+        <option data-translate="_en" value="english">English</option>
+        <option data-translate="_nl" value="dutch">Dutch</option>
+    </select><br>
+
+    <section>
+        <select id="gender">
+            <option data-translate="_male" value="1">Male</option>
+            <option data-translate="_female" value="2">Female</option>
+        </select><br>
+    </section>
+    
+    <form action="get.php">
+        <label data-translate="_salutation">Salutation: </label> <label id="showGender">
+            <label data-translate='_salM' id="male" style="display:none">Male,</label>
+            <label data-translate='_salF' id="female" style="display:none">Female,</label>
+        </label><br>
+        <label data-translate="_name">Name: </label><input type="text" name="name" pattern="[A-Za-z]{3,14}"><br>
+        <label data-translate="_lastname">Last name: </label><input type="text" name="lname" pattern="[A-Za-z]{2,14}"><br>
+        <label data-translate="_adress">Adress: </label><input type="text" name="adress" pattern="([A-Za-z]{2,14})? ([0-9]{0,3})"><br>
+        <label data-translate="_postalcode">Postal Code: </label><input name="" type="text"><br>
+        <label data-translate="_birthdate">Birthdate:  </label><input name="" type="text"><br>
+        <label data-translate="_nationality">Nationality:  </label><input name="" type="text"><br>
+        <label data-translate="_job">Job:  </label><input name="" type="text"><br>
+        <label data-translate="_comment">Comment:  </label><input name="" type="text"><br>
+
+        <input type="submit">
+        Aanhef: heer/mevrouw
+        Naam (ABC)
+        Adres (1234AB)
+        Woonplaats (+s +0)
+        Postcode
+        Geboortedatum
+        Nationaliteit
+        Beroep
+        Opmerkingen
+    </form>
+    <script>
+        $(function () {
+
+// Lets be professional, shall we?
+"use strict";
+
+// Some variables for later
+var dictionary, set_lang;
+
+// Object literal behaving as multi-dictionary
+dictionary = {
+    "english": {
+        "_en":"English",
+        "_nl":"Dutch",
+        "_salM":"male,",
+        "_salF":"female,",
+        "_male": "Male",
+        "_female": "Female",
+        "_salutation": "Salutation: ",
+        "_name": "Name: ",
+        "_lastname": "Last name: ",
+        "_adress": "Adress: ",
+        "_postalcode": "Postal Code: ",
+        "_birthdate":"Birthdate: ",
+        "_nationality":"Nationality: ",
+        "_job":"Job: ",
+        "_comment":"Comment: ",
+    },
+    "dutch": {
+        "_en":"Engels",
+        "_nl":"Nederlands",
+        "_salM":"heer,",
+        "_salF":"mevrouw,",
+        "_male": "Man",
+        "_female": "Mevrouw",
+        "_salutation": "Aanhef: ",
+        "_name": "Naam: ",
+        "_lastname": "Achternaam: ",
+        "_adress": "Adres: ",
+        "_postalcode": "Postcode: ",
+        "_birthdate":"Geboortedatum: ",
+        "_nationality":"Nationaliteit: ",
+        "_job":"Beroep: ",
+        "_comment":"Opmerkingen: ",
+    }
+};
+
+// Function for swapping dictionaries
+set_lang = function (dictionary) {
+    $("[data-translate]").text(function () {
+        var key = $(this).data("translate");
+        if (dictionary.hasOwnProperty(key)) {
+            return dictionary[key];
+        }
+    });
+};
+
+// Swap languages when menu changes
+$("#lang").on("change", function () {
+    var language = $(this).val().toLowerCase();
+    if (dictionary.hasOwnProperty(language)) {
+        set_lang(dictionary[language]);
+    }
+});
+
+// Set initial language to English
+set_lang(dictionary.english);
+
+// check gender
+$("#gender").on("change", function () {
+    var gender = $(this).val();
+    var fem = document.getElementById("female");
+    var male = document.getElementById("male");
+    var style = document.getElementById("style");
+
+    if(gender == 1){ // man
+        fem.style.display = "none";
+        male.style.display = "inline";
+        style.classList.add("man");
+        style.classList.remove("vrouw");
+    }else if(gender == 2){ // vrouw
+        male.style.display = "none";
+        fem.style.display = "inline";
+        style.classList.add("vrouw");
+        style.classList.remove("man");
+    }
+});
+// verander thema van kleur als het man of vrouw is.
+
+
+});
+    </script>   
+</body>
+</html>
